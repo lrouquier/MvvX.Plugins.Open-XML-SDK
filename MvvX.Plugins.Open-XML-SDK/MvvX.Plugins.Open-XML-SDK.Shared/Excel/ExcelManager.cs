@@ -14,6 +14,19 @@ namespace MvvX.Plugins.OpenXMLSDK.Platform.Excel
 
         private ExcelPackage package = null;
         private ExcelWorksheet worksheet = null;
+
+        private string worksheetName;
+        public string WorksheetName
+        {
+            get
+            {
+                return this.worksheetName;
+            }
+            set
+            {
+                this.worksheetName = value;
+            }
+        }
         #endregion
 
         #region Dispose
@@ -29,7 +42,7 @@ namespace MvvX.Plugins.OpenXMLSDK.Platform.Excel
         #region Create / Open / Save
 
         /// <summary>
-        /// Create a new instance of the ExcelPackage class based on a stream
+        /// Create a new excel document
         /// </summary>
         /// <param name="newStream">The stream object can be empty or contain a package. The stream must be Read/Write</param>
         public bool CreateDoc(Stream newStream)
@@ -46,6 +59,26 @@ namespace MvvX.Plugins.OpenXMLSDK.Platform.Excel
             }
 
         }
+
+        /// <summary>
+        /// Create a new excel document based on a template
+        /// </summary>
+        /// <param name="newStream">The output stream. Must be an empty read/write stream.</param>
+        /// <param name="templateStream">This stream is copied to the output stream at load</param>
+        public bool CreateDocFromTemplate(Stream newStream, Stream templateStream)
+        {
+            try
+            {
+                package = new ExcelPackage(newStream, templateStream);
+                return true;
+            }
+            catch (Exception e)
+            {
+                package = null;
+                return false;
+            }
+        }
+
 
         /// <summary>
         /// Saves all the components back into the package.
@@ -95,12 +128,12 @@ namespace MvvX.Plugins.OpenXMLSDK.Platform.Excel
         }
 
         /// <summary>
-        /// Add the headers
+        /// Add value to a cell
         /// </summary>
 		/// <param name="row">The row number in the worksheet</param>
 		/// <param name="col">The column number in the worksheet</param>
         /// <param name="value">value of the cell</param>
-        public bool AddHeader(int row, int col, string value)
+        public bool AddCell(int row, int col, string value)
         {
             if (row == 0)
                 throw new ArgumentNullException("row must be not null");
@@ -111,6 +144,9 @@ namespace MvvX.Plugins.OpenXMLSDK.Platform.Excel
 
             try
             {
+                if(worksheet == null)
+                    worksheet = package.Workbook.Worksheets[WorksheetName];
+
                 worksheet.Cells[row, col].Value = value;
                 return true;
             }
@@ -134,6 +170,9 @@ namespace MvvX.Plugins.OpenXMLSDK.Platform.Excel
 
             try
             {
+                if (worksheet == null)
+                    worksheet = package.Workbook.Worksheets[WorksheetName];
+
                 worksheet.Cells[cell].Value = value;
                 return true;
             }
@@ -157,6 +196,9 @@ namespace MvvX.Plugins.OpenXMLSDK.Platform.Excel
 
             try
             {
+                if (worksheet == null)
+                    worksheet = package.Workbook.Worksheets[WorksheetName];
+
                 worksheet.Cells[cell].Value = value;
                 return true;
             }

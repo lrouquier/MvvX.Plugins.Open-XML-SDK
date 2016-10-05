@@ -29,7 +29,7 @@ namespace MvvX.Plugins.OpenXMLSDK.TestConsole
             if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "sample.xlsx")))
                 File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "sample.xlsx"));
 
-            var fs = new FileStream(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "sample.xlsx"), FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            FileStream fs = new FileStream(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "sample.xlsx"), FileMode.OpenOrCreate, FileAccess.ReadWrite);
 
             using (IExcelManager excel = new ExcelManager())
             {
@@ -42,7 +42,7 @@ namespace MvvX.Plugins.OpenXMLSDK.TestConsole
                 //add the headers
                 for (int i = 1 ; i < 5; i++)
                 {
-                    excel.AddHeader(1, i, "Column" + i);
+                    excel.AddCell(1, i, "Column" + i);
                 }
 
                 //add some values
@@ -54,6 +54,29 @@ namespace MvvX.Plugins.OpenXMLSDK.TestConsole
 
                 excel.Save();
             }
+
+            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "sample2.xlsx")))
+                File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "sample2.xlsx"));
+
+            FileStream instream = new FileStream(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "template.xlsx"), FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            FileStream stream = new FileStream(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "sample2.xlsx"), FileMode.OpenOrCreate, FileAccess.ReadWrite);
+
+            using (IExcelManager excel = new ExcelManager())
+            {
+                excel.CreateDocFromTemplate(stream, instream);
+
+                excel.WorksheetName = "First Worksheet";
+
+                //add some values
+                excel.AddCell("A2", 1111);
+                excel.AddCell("A3", "000");
+                excel.AddCell("C5", "Test template");
+
+                excel.Save(stream);
+                instream.Close();
+            }
+
+
 
 
             //    using (IWordManager word = new WordManager())

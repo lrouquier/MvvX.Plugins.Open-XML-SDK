@@ -5,8 +5,12 @@ namespace MvvX.Plugins.OpenXMLSDK.Excel
 {
     public interface IExcelManager : IDisposable
     {
-        #region Create / Open / Save
+
         string WorksheetName { get; set; }
+        int WorksheetNumber { get; set; }
+
+        #region Create / Open / Save
+
         /// <summary>
         /// Create a new instance of the ExcelPackage class based on a stream
         /// </summary>

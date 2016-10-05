@@ -27,6 +27,21 @@ namespace MvvX.Plugins.OpenXMLSDK.Platform.Excel
                 this.worksheetName = value;
             }
         }
+
+
+        private int worksheetNumber;
+        public int WorksheetNumber
+        {
+            get
+            {
+                return this.worksheetNumber;
+            }
+            set
+            {
+                this.worksheetNumber = value;
+            }
+        }
+
         #endregion
 
         #region Dispose
@@ -104,6 +119,14 @@ namespace MvvX.Plugins.OpenXMLSDK.Platform.Excel
 
         #region Workbook
 
+        public void GetCurrentWorksheet()
+        {
+            if (WorksheetName != null)
+                worksheet = package.Workbook.Worksheets[WorksheetName];
+            else if (WorksheetNumber != 0)
+                worksheet = package.Workbook.Worksheets[WorksheetNumber];
+        }
+
         /// <summary>
         /// Add a new worksheet
         /// </summary>
@@ -144,14 +167,15 @@ namespace MvvX.Plugins.OpenXMLSDK.Platform.Excel
 
             try
             {
-                if(worksheet == null)
-                    worksheet = package.Workbook.Worksheets[WorksheetName];
+                if (worksheet == null)
+                    GetCurrentWorksheet();
 
                 worksheet.Cells[row, col].Value = value;
                 return true;
             }
             catch (Exception e)
             {
+                worksheet = null;
                 return false;
             }
         }
@@ -171,13 +195,14 @@ namespace MvvX.Plugins.OpenXMLSDK.Platform.Excel
             try
             {
                 if (worksheet == null)
-                    worksheet = package.Workbook.Worksheets[WorksheetName];
+                    GetCurrentWorksheet();
 
                 worksheet.Cells[cell].Value = value;
                 return true;
             }
             catch (Exception e)
             {
+                worksheet = null;
                 return false;
             }
         }
@@ -197,13 +222,14 @@ namespace MvvX.Plugins.OpenXMLSDK.Platform.Excel
             try
             {
                 if (worksheet == null)
-                    worksheet = package.Workbook.Worksheets[WorksheetName];
+                    GetCurrentWorksheet();
 
                 worksheet.Cells[cell].Value = value;
                 return true;
             }
             catch (Exception e)
             {
+                worksheet = null;
                 return false;
             }
         }

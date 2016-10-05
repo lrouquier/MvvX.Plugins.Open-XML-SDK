@@ -65,7 +65,10 @@ namespace MvvX.Plugins.OpenXMLSDK.TestConsole
             {
                 excel.CreateDocFromTemplate(stream, instream);
 
+                //give current worksheet name 
                 excel.WorksheetName = "First Worksheet";
+                //or number
+                excel.WorksheetNumber = 1;
 
                 //add some values
                 excel.AddCell("A2", 1111);

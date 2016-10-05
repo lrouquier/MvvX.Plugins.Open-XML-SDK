@@ -13,7 +13,7 @@ namespace MvvX.Plugins.OpenXMLSDK.Platform.Excel
         #region Fields
 
         private ExcelPackage package = null;
-
+        private ExcelWorksheet worksheet = null;
         #endregion
 
         #region Dispose
@@ -83,14 +83,87 @@ namespace MvvX.Plugins.OpenXMLSDK.Platform.Excel
 
             try
             {
-                package.Workbook.Worksheets.Add(name);
+                worksheet = package.Workbook.Worksheets.Add(name);
+                return true;
+            }
+            catch (Exception e)
+            {
+                worksheet = null;
+                return false;
+            }
+
+        }
+
+        /// <summary>
+        /// Add the headers
+        /// </summary>
+		/// <param name="row">The row number in the worksheet</param>
+		/// <param name="col">The column number in the worksheet</param>
+        /// <param name="value">value of the cell</param>
+        public bool AddHeader(int row, int col, string value)
+        {
+            if (row == 0)
+                throw new ArgumentNullException("row must be not null");
+            if (col == 0)
+                throw new ArgumentNullException("col must be not null");
+            if (value == null)
+                throw new ArgumentNullException("value must be not null");
+
+            try
+            {
+                worksheet.Cells[row, col].Value = value;
                 return true;
             }
             catch (Exception e)
             {
                 return false;
             }
+        }
 
+        /// <summary>
+        /// Add value to a cell
+        /// </summary>
+        /// <param name="cell">cell ex : A2</param>
+        /// <param name="value">value of the cell</param>
+        public bool AddCell(string cell, string value)
+        {
+            if (cell == null)
+                throw new ArgumentNullException("cell must be not null");
+            if (value == null)
+                throw new ArgumentNullException("value must be not null");
+
+            try
+            {
+                worksheet.Cells[cell].Value = value;
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Add value to a cell
+        /// </summary>
+        /// <param name="cell">cell ex : A2</param>
+        /// <param name="value">value of the cell</param>
+        public bool AddCell(string cell, int value)
+        {
+            if (cell == null)
+                throw new ArgumentNullException("cell must be not null");
+            if (value == 0)
+                throw new ArgumentNullException("value must be not null");
+
+            try
+            {
+                worksheet.Cells[cell].Value = value;
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
         }
 
         #endregion

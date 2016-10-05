@@ -26,13 +26,32 @@ namespace MvvX.Plugins.OpenXMLSDK.TestConsole
 
             //string finalFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "Results", "FinalDoc_Test_OrientationParagraph-" + DateTime.Now.ToFileTime() + ".docx");
 
+            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "sample.xlsx")))
+                File.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "sample.xlsx"));
+
             var fs = new FileStream(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "App_Data", "sample.xlsx"), FileMode.OpenOrCreate, FileAccess.ReadWrite);
 
             using (IExcelManager excel = new ExcelManager())
             {
 
                 excel.CreateDoc(fs);
+
+                // add a new worksheet to the empty workbook
                 excel.CreateWorksheet("First Worksheet");
+
+                //add the headers
+                for (int i = 1 ; i < 5; i++)
+                {
+                    excel.AddHeader(1, i, "Column" + i);
+                }
+
+                //add some values
+                excel.AddCell("A2", 4564);
+                excel.AddCell("A3", "Cell A3");
+                excel.AddCell("C5", "Hi !");
+                excel.AddCell("B2", 45);
+                excel.AddCell("D2", 787);
+
                 excel.Save();
             }
 

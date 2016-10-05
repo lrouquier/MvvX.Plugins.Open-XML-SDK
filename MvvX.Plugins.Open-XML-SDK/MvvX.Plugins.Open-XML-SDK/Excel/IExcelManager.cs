@@ -33,8 +33,29 @@ namespace MvvX.Plugins.OpenXMLSDK.Excel
         /// Add a new worksheet
         /// </summary>
         /// <param name="name">name of the worksheet</param>
-        /// <returns></returns>
         bool CreateWorksheet(string name);
+
+        /// <summary>
+        /// Add the headers
+        /// </summary>
+		/// <param name="row">The row number in the worksheet</param>
+		/// <param name="col">The column number in the worksheet</param>
+        /// <param name="value">value of the cell</param>
+        bool AddHeader(int row, int col, string value);
+
+        /// <summary>
+        /// Add value to a cell
+        /// </summary>
+        /// <param name="cell">cell ex : A2</param>
+        /// <param name="value">value of the cell</param>
+        bool AddCell(string cell, string value);
+
+        /// <summary>
+        /// Add value to a cell
+        /// </summary>
+        /// <param name="cell">cell ex : A2</param>
+        /// <param name="value">value of the cell</param>
+        bool AddCell(string cell, int value);
 
         #endregion
     }

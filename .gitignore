@@ -250,3 +250,4 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+/MvvX.Plugins.Open-XML-SDK/MvvX.Plugins.Open-XML-SDK.TestConsole/App_Data/sample.xlsx
